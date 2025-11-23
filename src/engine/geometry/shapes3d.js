@@ -7,24 +7,26 @@
  * @param {string|Array} color - Nome da cor ou array RGB [r, g, b]
  * @param {number} scale - Escala da forma (1.0 = tamanho padrão)
  * @param {Array} position - Posição [x, y, z] do centro da forma
+ * @param {number} scaleY - Escala opcional para altura (se não fornecido, usa scale)
  * @returns {Object} Objeto com vertices, colors e indices
  */
-function createCube(color = 'BLUE', scale = 1.0, position = [0.0, 0.0, 0.0]) {
+function createCube(color = 'BLUE', scale = 1.0, position = [0.0, 0.0, 0.0], scaleY = null) {
   const [x, y, z] = position;
   const s = scale * 0.5; // metade do tamanho para centralizar
+  const sy = scaleY ? scaleY * 0.5 : s; // se scaleY não for passado, usa scale padrão
 
-  // 8 vértices do cubo
+  // 8 vértices do cubo/paralelepípedo
   const vertices = [
     // Face frontal
-    x - s, y - s, z + s,  // 0
-    x + s, y - s, z + s,  // 1
-    x + s, y + s, z + s,  // 2
-    x - s, y + s, z + s,  // 3
+    x - s, y - sy, z + s,  // 0
+    x + s, y - sy, z + s,  // 1
+    x + s, y + sy, z + s,  // 2
+    x - s, y + sy, z + s,  // 3
     // Face traseira
-    x - s, y - s, z - s,  // 4
-    x + s, y - s, z - s,  // 5
-    x + s, y + s, z - s,  // 6
-    x - s, y + s, z - s   // 7
+    x - s, y - sy, z - s,  // 4
+    x + s, y - sy, z - s,  // 5
+    x + s, y + sy, z - s,  // 6
+    x - s, y + sy, z - s   // 7
   ];
 
   // Índices para formar 12 triângulos (6 faces × 2 triângulos)
