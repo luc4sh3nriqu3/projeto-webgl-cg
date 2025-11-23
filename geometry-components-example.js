@@ -33,43 +33,44 @@ function getTransformMatrix(angleX, angleY, scale = 1.0) {
 // ═══════════════════════════════════════════════════════════════════
 // 🌐 EXEMPLO: Esfera Magenta 3D em perspectiva
 // ═══════════════════════════════════════════════════════════════════
-console.log('🌐 Esfera magenta 3D com perspectiva');
-const sphere = createSphere('MAGENTA', 0.7, [0.0, 0.0, 0.0], 2); // Detalhe 2 para melhor definição
-draw3D(sphere.vertices, sphere.colors, sphere.indices, getTransformMatrix(angleX, angleY, 0.8));
+//console.log('🌐 Esfera magenta 3D com perspectiva');
+// const sphere = createSphere('MAGENTA', 0.7, [0.0, 0.0, 0.0], 2); // Detalhe 2 para melhor definição
+// draw3D(sphere.vertices, sphere.colors, sphere.indices, getTransformMatrix(angleX, angleY, 0.8));
 
 // Aguardar e mostrar outras formas para comparação
-setTimeout(() => {
-  clear();
-  console.log('🧊 Cubo azul 3D em perspectiva para comparação');
-  const cube = createCube('BLUE', 0.6, [0.0, 0.0, 0.0]);
-  draw3D(cube.vertices, cube.colors, cube.indices, getTransformMatrix(angleX, angleY, 0.8));
-}, 3000);
+// setTimeout(() => {
+//   clear();
+//   console.log('🧊 Cubo azul 3D em perspectiva para comparação');
+//   const cube = createCube('BLUE', 0.6, [0.0, 0.0, 0.0]);
+//   draw3D(cube.vertices, cube.colors, cube.indices, getTransformMatrix(angleX, angleY, 0.8));
+// }, 3000);
 
-setTimeout(() => {
-  clear();
-  console.log('🥤 Cilindro cyan 3D em perspectiva');
-  const cylinder = createCylinder('CYAN', 0.5, [0.0, 0.0, 0.0], 16, 1.0); // 16 segmentos para suavidade
-  draw3D(cylinder.vertices, cylinder.colors, cylinder.indices, getTransformMatrix(angleX, angleY + Math.PI/8, 0.8));
-}, 6000);
+// setTimeout(() => {
+//   clear();
+//   console.log('🥤 Cilindro cyan 3D em perspectiva');
+//   const cylinder = createCylinder('CYAN', 0.5, [0.0, 0.0, 0.0], 16, 1.0); // 16 segmentos para suavidade
+//   draw3D(cylinder.vertices, cylinder.colors, cylinder.indices, getTransformMatrix(angleX, angleY + Math.PI/8, 0.8));
+// }, 6000);
 
-setTimeout(() => {
-  clear();
-  console.log('🎯 Comparação: Esfera, Cubo e Cilindro');
+// setTimeout(() => {
+//   clear();
+//   console.log('🎯 Comparação: Esfera, Cubo e Cilindro');
 
-  // Criar múltiplas formas para comparação
-  const sphere1 = createSphere('RED', 0.25, [-0.5, 0.0, 0.0], 2);
-  const cube1 = createCube('GREEN', 0.25, [0.0, 0.0, 0.0]);
-  const cylinder1 = createCylinder('BLUE', 0.2, [0.5, 0.0, 0.0], 12, 0.8);
+//   // Criar múltiplas formas para comparação
+//   const sphere1 = createSphere('RED', 0.25, [-0.5, 0.0, 0.0], 2);
+//   const cube1 = createCube('GREEN', 0.25, [0.0, 0.0, 0.0]);
+//   const cylinder1 = createCylinder('BLUE', 0.2, [0.5, 0.0, 0.0], 12, 0.8);
+  drawDino();
 
   // Aplicar perspectivas ligeiramente diferentes
-  const matrix1 = getTransformMatrix(angleX, angleY - Math.PI/12, 0.7);
-  const matrix2 = getTransformMatrix(angleX, angleY, 0.7);
-  const matrix3 = getTransformMatrix(angleX, angleY + Math.PI/12, 0.7);
+  // const matrix1 = getTransformMatrix(angleX, angleY - Math.PI/12, 0.7);
+  // const matrix2 = getTransformMatrix(angleX, angleY, 0.7);
+  // const matrix3 = getTransformMatrix(angleX, angleY + Math.PI/12, 0.7);
 
-  draw3D(sphere1.vertices, sphere1.colors, sphere1.indices, matrix1);
-  draw3D(cube1.vertices, cube1.colors, cube1.indices, matrix2);
-  draw3D(cylinder1.vertices, cylinder1.colors, cylinder1.indices, matrix3);
-}, 9000);
+  // draw3D(sphere1.vertices, sphere1.colors, sphere1.indices, matrix1);
+  // draw3D(cube1.vertices, cube1.colors, cube1.indices, matrix2);
+  // draw3D(cylinder1.vertices, cylinder1.colors, cylinder1.indices, matrix3);
+//}, 9000);
 
 // Aguardar um pouco e mostrar outras formas
 // setTimeout(() => {
