@@ -60,7 +60,8 @@ function getTransformMatrix(angleX, angleY, scale = 1.0) {
 //   const sphere1 = createSphere('RED', 0.25, [-0.5, 0.0, 0.0], 2);
 //   const cube1 = createCube('GREEN', 0.25, [0.0, 0.0, 0.0]);
 //   const cylinder1 = createCylinder('BLUE', 0.2, [0.5, 0.0, 0.0], 12, 0.8);
-  drawDino();
+//  drawDino();
+    drawCacto();
 
   // Aplicar perspectivas ligeiramente diferentes
   // const matrix1 = getTransformMatrix(angleX, angleY - Math.PI/12, 0.7);
