@@ -6,15 +6,6 @@
  *
  * Options accepted: { angleX, angleY, scale }
  */
-const ANGLE_PRESETS = [
-  { name: 'front', angleX: 0, angleY: 0, degX: 0, degY: 0 },            // vista frontal
-  { name: 'top', angleX: -Math.PI / 2, angleY: 0, degX: -90, degY: 0 },   // vista de cima
-  { name: 'bottom', angleX: Math.PI / 2, angleY: 0, degX: 90, degY: 0 },  // vista de baixo
-  { name: 'left', angleX: 0, angleY: -Math.PI / 2, degX: 0, degY: -90 },  // vista lateral esquerda
-  { name: 'right', angleX: 0, angleY: Math.PI / 2, degX: 0, degY: 90 },   // vista lateral direita
-  { name: 'back', angleX: 0, angleY: Math.PI, degX: 0, degY: 180 },       // vista traseira
-  { name: 'iso', angleX: Math.PI / 6, angleY: Math.PI / 6, degX: 30, degY: 30 } // isométrica leve
-];
 
 // Paleta: tons de verde (arrays RGB)
 const G_VERY_DARK = [0.0, 0.18, 0.06];
@@ -24,11 +15,11 @@ const G_MUTED = [0.23, 0.52, 0.26];
 const G_LIGHT = [0.6, 0.9, 0.6];
 
 
-function drawDino() {
+function drawDino(anglePreset) {
 
-    const preset = ANGLE_PRESETS.find(p => p.name ===  'bottom') || ANGLE_PRESETS[0];
-    const angleX = preset.angleX;
-    const angleY = preset.angleY;
+    const font = ANGLE_PRESETS.find(preset => preset.name === anglePreset);
+    let angleX = font.angleX;
+    let angleY = font.angleY;
     const scale = 0.9;
 
     const torsoTop = createCube(G_MED, 0.7, [0.0, -0.17, 0.0]);
