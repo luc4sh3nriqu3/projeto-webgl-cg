@@ -59,7 +59,7 @@ var m4 = {
     var tmp_21 = m20 * m01;
     var tmp_22 = m00 * m11;
     var tmp_23 = m10 * m01;
-    
+
     var t0 = (tmp_0 * m11 + tmp_3 * m21 + tmp_4 * m31) -
     (tmp_1 * m11 + tmp_2 * m21 + tmp_5 * m31);
     var t1 = (tmp_1 * m01 + tmp_6 * m21 + tmp_9 * m31) -
@@ -68,9 +68,9 @@ var m4 = {
     (tmp_3 * m01 + tmp_6 * m11 + tmp_11 * m31);
     var t3 = (tmp_5 * m01 + tmp_8 * m11 + tmp_11 * m21) -
     (tmp_4 * m01 + tmp_9 * m11 + tmp_10 * m21);
-    
+
     var d = 1.0 / (m00 * t0 + m10 * t1 + m20 * t2 + m30 * t3);
-    
+
     dst[0] = d * t0;
     dst[1] = d * t1;
     dst[2] = d * t2;
@@ -99,7 +99,7 @@ var m4 = {
     (tmp_22 * m32 + tmp_14 * m02 + tmp_19 * m12));
     dst[15] = d * ((tmp_22 * m22 + tmp_16 * m02 + tmp_21 * m12) -
     (tmp_20 * m12 + tmp_23 * m22 + tmp_17 * m02));
-    
+
     return dst;
   },
 
@@ -230,7 +230,7 @@ var m4 = {
     return m4.multiply(m4.scaling(sx, sy, sz),m);
   },
 
-  unitVector: function(v){ 
+  unitVector: function(v){
     let vModulus = vectorModulus(v);
     return v.map(function(x) { return x/vModulus; });
   },
@@ -285,6 +285,55 @@ var m4 = {
       (xw_max+xw_min)/(xw_max-xw_min), (yw_max+yw_min)/(yw_max-yw_min), (z_near+z_far)/(z_near-z_far), -1,
       0, 0, -(2*z_near*z_far)/(z_near-z_far), 0
     ];
+  },
+
+  // Matriz de perspectiva simples
+  perspective: function(fieldOfViewInRadians, aspect, near, far) {
+    var f = Math.tan(Math.PI * 0.5 - 0.5 * fieldOfViewInRadians);
+    var rangeInv = 1.0 / (near - far);
+
+    return [
+      f / aspect, 0, 0, 0,
+      0, f, 0, 0,
+      0, 0, (near + far) * rangeInv, -1,
+      0, 0, near * far * rangeInv * 2, 0
+    ];
+  },
+
+  // Matriz lookAt (view matrix)
+  lookAt: function(cameraPosition, target, up) {
+    var zAxis = m4.subtractVectors(cameraPosition, target);
+    zAxis = m4.normalize(zAxis);
+    var xAxis = m4.cross(up, zAxis);
+    xAxis = m4.normalize(xAxis);
+    var yAxis = m4.cross(zAxis, xAxis);
+
+    return [
+       xAxis[0], xAxis[1], xAxis[2], 0,
+       yAxis[0], yAxis[1], yAxis[2], 0,
+       zAxis[0], zAxis[1], zAxis[2], 0,
+       cameraPosition[0], cameraPosition[1], cameraPosition[2], 1,
+    ];
+  },
+
+  // Funções auxiliares para lookAt
+  subtractVectors: function(a, b) {
+    return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  },
+
+  normalize: function(v) {
+    var length = Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    if (length > 0.00001) {
+      return [v[0] / length, v[1] / length, v[2] / length];
+    } else {
+      return [0, 0, 0];
+    }
+  },
+
+  cross: function(a, b) {
+    return [a[1] * b[2] - a[2] * b[1],
+            a[2] * b[0] - a[0] * b[2],
+            a[0] * b[1] - a[1] * b[0]];
   }
 
 };

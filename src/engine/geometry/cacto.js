@@ -32,21 +32,21 @@ function createThorns(position, radius, height, count) {
 
 function drawCacto(x = 0.0, y = -0.5, z = 0.0) {
     // Modo de desenho de linhas no WebGL
-    const GL_LINES = 1; 
+    const GL_LINES = 1;
 
     // Definir a rotação da câmera
     const font = ANGLE_PRESETS.find(preset => preset.name === 'front'); // ou 'iso' para ver melhor
     let angleX = font.angleX;
     let angleY = font.angleY;
     const modelMatrix = getTransformMatrix(angleX, angleY, 0.8);
-    
-    const cactoColor = 'GREEN'; 
+
+    const cactoColor = 'GREEN';
 
     // --- 1. Tronco Principal ---
     const troncoScale = 0.23;
     const troncoHeight = 1.0;
     const troncoRadius = troncoScale * 0.5; // Raio é metade da escala
-    
+
     // Corpo do tronco
     const tronco = createCylinder(cactoColor, troncoScale, [x, y, z], 12, troncoHeight);
     draw3D(tronco.vertices, tronco.colors, tronco.indices, modelMatrix);
@@ -64,9 +64,9 @@ function drawCacto(x = 0.0, y = -0.5, z = 0.0) {
     // --- 2. Braço Direito (Mais alto) ---
     const bracoScale = 0.25;
     const bracoHeight = 0.5;
-    const offsetBracoDirY = 0.1; 
-    const distBracoDir = 0.25; 
-    
+    const offsetBracoDirY = 0.1;
+    const distBracoDir = 0.25;
+
     // Conector horizontal
     const conectorDir = createCube(cactoColor, bracoScale, [x + distBracoDir -0.04, y + offsetBracoDirY + 0.019, z]);
     draw3D(conectorDir.vertices, conectorDir.colors, conectorDir.indices, modelMatrix);
@@ -91,8 +91,8 @@ function drawCacto(x = 0.0, y = -0.5, z = 0.0) {
 
 
     // --- 3. Braço Esquerdo (Mais baixo) ---
-    const offsetBracoEsqY = -0.2; 
-    const distBracoEsq = -0.25; 
+    const offsetBracoEsqY = -0.2;
+    const distBracoEsq = -0.25;
 
     // Conector horizontal
     const conectorEsq = createCube(cactoColor, bracoScale-0.04, [x + distBracoEsq + 0.03, y + offsetBracoEsqY, z]);

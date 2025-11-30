@@ -56,7 +56,7 @@ function drawDino(anglePreset) {
     const thighR = createSphere(G_MED, 0.25, [0.0, -0.55, -0.33], 2);
     draw3D(thighL.vertices, thighL.colors, thighL.indices, getTransformMatrix(angleX, angleY, scale));
     draw3D(thighR.vertices, thighR.colors, thighR.indices, getTransformMatrix(angleX, angleY, scale));
-    
+
     const shinL = createCylinder(G_DARK, 0.15, [0.0, -0.65, 0.33], 20, 0.4);
     const shinR = createCylinder(G_DARK, 0.15, [0.0, -0.65, -0.33], 20, 0.4);
     draw3D(shinL.vertices, shinL.colors, shinL.indices, getTransformMatrix(angleX, angleY, scale));
@@ -66,9 +66,9 @@ function drawDino(anglePreset) {
     const footR = createCube(G_VERY_DARK, 0.22, [0.0, -0.95, -0.33]);
     draw3D(footL.vertices, footL.colors, footL.indices, getTransformMatrix(angleX, angleY, scale));
     draw3D(footR.vertices, footR.colors, footR.indices, getTransformMatrix(angleX, angleY, scale));
-    
+
     const eyeWhiteL = createSphere([0.5, 0.5, 0.5], 0.08, [0.23, 0.92, 0.28], 1);
-    const eyePupilL = createSphere(G_VERY_DARK, 0.05, [0.23, 0.92, 0.3], 1); 
+    const eyePupilL = createSphere(G_VERY_DARK, 0.05, [0.23, 0.92, 0.3], 1);
     draw3D(eyeWhiteL.vertices, eyeWhiteL.colors, eyeWhiteL.indices, getTransformMatrix(angleX, angleY, scale));
     draw3D(eyePupilL.vertices, eyePupilL.colors, eyePupilL.indices, getTransformMatrix(angleX, angleY, scale));
 
@@ -83,7 +83,7 @@ function drawDino(anglePreset) {
     draw3D(armJointL.vertices, armJointL.colors, armJointL.indices, getTransformMatrix(angleX, angleY, scale));
     draw3D(armL.vertices, armL.colors, armL.indices, getTransformMatrix(angleX, angleY, scale));
     draw3D(handL.vertices, handL.colors, handL.indices, getTransformMatrix(angleX, angleY, scale));
-    
+
     const armJointR = createCube(G_MUTED, 0.12, [0.56, 0.14, -0.25]);
     const armR = createCube(G_MUTED, 0.12, [0.63, 0.14, -0.25]);
     const handR = createCube(G_MUTED, 0.12, [0.63, 0.10, -0.25]);

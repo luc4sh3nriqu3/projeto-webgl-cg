@@ -1,14 +1,168 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini-game</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dino Runner 3D - WebGL Game</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 100%);
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: auto;
+    }
+
+    h1 {
+      color: #2c3e50;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin: 20px 0;
+      font-size: 2.5em;
+      text-align: center;
+    }
+
+    #gameContainer {
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      overflow: hidden;
+      background: white;
+    }
+
+    #webglCanvas {
+      display: block;
+      background: linear-gradient(to bottom, #87ceeb 0%, #f0e68c 100%);
+    }
+
+    #instructions {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      max-width: 800px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    #instructions h2 {
+      color: #2c3e50;
+      margin-top: 0;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .control-item {
+      background: #ecf0f1;
+      padding: 10px;
+      border-radius: 5px;
+      border-left: 4px solid #3498db;
+    }
+
+    .key {
+      display: inline-block;
+      background: #34495e;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-right: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .description {
+      color: #555;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .game-title {
+      animation: pulse 2s infinite;
+    }
+  </style>
 </head>
 <body>
+  <h1 class="game-title">🦖 Dino Runner 3D</h1>
 
-    <script src="scripts.js"></script>
+  <div id="gameContainer">
+    <canvas id="webglCanvas" width="1000" height="700"></canvas>
+  </div>
 
+  <div id="instructions">
+    <h2>📋 Como Jogar</h2>
+    <p>Ajude o dinossauro a desviar dos obstáculos que vêm em sua direção!</p>
+
+    <div class="controls">
+      <div class="control-item">
+        <span class="key">←</span>
+        <span class="key">→</span>
+        <div class="description">Mover entre as 3 pistas</div>
+      </div>
+
+      <div class="control-item">
+        <span class="key">↑</span>
+        <span class="key">ESPAÇO</span>
+        <div class="description">Pular sobre obstáculos</div>
+      </div>
+
+      <div class="control-item">
+        <span class="key">P</span>
+        <div class="description">Pausar o jogo</div>
+      </div>
+
+      <div class="control-item">
+        <span class="key">R</span>
+        <div class="description">Reiniciar (após Game Over)</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 5px; border-left: 4px solid #ffc107;">
+      <strong>💡 Dicas:</strong>
+      <ul style="margin: 10px 0; padding-left: 20px;">
+        <li>Cactos e pedras: passe por cima pulando ou desvie lateralmente</li>
+        <li>Pássaros: geralmente voam mais alto, você pode passar por baixo</li>
+        <li>A velocidade aumenta com o tempo!</li>
+        <li>Planeje seus movimentos com antecedência</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Dependências do Motor WebGL 3D -->
+  <script src="src/math/m4.js"></script>
+  <script src="src/engine/colors.js"></script>
+  <script src="src/engine/const/const.js"></script>
+  <script src="src/engine/transform.js"></script>
+  <script src="src/engine/webgl-utils.js"></script>
+  <script src="src/engine/webgl-utils-3d.js"></script>
+  <script src="src/engine/camera3d.js"></script>
+  <script src="src/engine/geometry/shapes.js"></script>
+  <script src="src/engine/geometry/shapes3d.js"></script>
+
+  <!-- Geometrias dos Objetos -->
+  <script src="src/engine/geometry/dino.js"></script>
+  <script src="src/engine/geometry/cacto.js"></script>
+  <script src="src/engine/geometry/rock.js"></script>
+  <script src="src/engine/geometry/bird.js"></script>
+
+  <!-- Sistema de Jogo -->
+  <script src="src/game/player.js"></script>
+  <script src="src/game/obstacle.js"></script>
+  <script src="src/game/gameManager.js"></script>
+  <script src="src/game/main.js"></script>
 </body>
 </html>
