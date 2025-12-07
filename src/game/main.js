@@ -11,7 +11,7 @@ let draw3D;
 let camera;
 let lastTime = 0;
 let cameraMode = 1; // Câmera default
-const sunPosition = [0, 10, -20]; // Posição fixa do sol no céu
+const sunPos = { x: -15, y: 5, z: -20 };
 
 // Função auxiliar para obter matriz de transformação compatível com drawDino/drawCacto
 function getTransformMatrix(angleX, angleY, scale = 1.0, position = [0, 0, 0]) {
@@ -99,6 +99,14 @@ function render(gameState) {
     // Limpar canvas
     webglContext.clear();
 
+    // 1. Atualizar a posição da luz para ser a mesma do Sol
+    // (Assumindo que você criou sunPos ou tem a posição do objeto Sol)
+    webglContext.setLightPosition(sunPos.x, sunPos.y, sunPos.z);
+
+    // 2. Desenhar o Objeto Visual do Sol (A bola amarela)
+    // Se você criou o arquivo sun.js como conversamos:
+    drawSun([sunPos.x, sunPos.y, sunPos.z]);
+
     // Renderizar pistas (chão)
     renderGround3D();
 
@@ -113,7 +121,6 @@ function render(gameState) {
     // Renderizar UI
     updateUIElements(gameState);
 
-    drawSun(sunPosition);
 }
 
 function renderGround3D() {

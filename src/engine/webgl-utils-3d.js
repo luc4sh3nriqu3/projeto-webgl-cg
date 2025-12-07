@@ -20,19 +20,28 @@ function initWebGL3D(canvasId) {
     uniform mat4 uModelMatrix;
     uniform mat4 uViewMatrix;
     uniform mat4 uProjectionMatrix;
-    uniform vec3 uLightDirection;
+    
+    // MUDANÇA 1: Receber a Posição da Luz em vez da Direção
+    uniform vec3 uLightPosition; 
 
     varying vec3 vColor;
     varying float vLighting;
 
     void main() {
-      // Transformação completa: Projeção * View * Model * Posição
+      // Posição do vértice no mundo
+      vec3 worldPos = (uModelMatrix * vec4(aPosition, 1.0)).xyz;
+
+      // Transformação final
       gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
 
-      // Calcular iluminação básica
+      // Calcular iluminação Pontual
       vec3 normal = normalize((uModelMatrix * vec4(aNormal, 0.0)).xyz);
-      float dotProduct = max(dot(normal, normalize(uLightDirection)), 0.0);
-      vLighting = 0.3 + dotProduct * 0.7; // Luz ambiente + luz direcional
+      
+      // MUDANÇA 2: Calcular vetor da luz (Do vértice ATÉ a luz)
+      vec3 lightVector = normalize(uLightPosition - worldPos);
+      
+      float dotProduct = max(dot(normal, lightVector), 0.0);
+      vLighting = 0.25 + dotProduct * 0.75; 
 
       vColor = aColor;
     }
@@ -122,12 +131,14 @@ function initWebGL3D(canvasId) {
     const uModelMatrix = gl.getUniformLocation(program, 'uModelMatrix');
     const uViewMatrix = gl.getUniformLocation(program, 'uViewMatrix');
     const uProjectionMatrix = gl.getUniformLocation(program, 'uProjectionMatrix');
-    const uLightDirection = gl.getUniformLocation(program, 'uLightDirection');
+    const uLightPositionLoc = gl.getUniformLocation(program, 'uLightPosition');
+    //const uLightDirection = gl.getUniformLocation(program, 'uLightDirection');
 
     gl.uniformMatrix4fv(uModelMatrix, false, modelMatrix || m4.identity());
     gl.uniformMatrix4fv(uViewMatrix, false, viewMatrix);
     gl.uniformMatrix4fv(uProjectionMatrix, false, projectionMatrix);
-    gl.uniform3fv(uLightDirection, [-0.5, -1.0, -0.5]); // Luz vindo de cima
+    gl.uniform3fv(uLightPositionLoc, lightPosition);
+    //gl.uniform3fv(uLightDirection, [-0.5, -1.0, -0.5]); // Luz vindo de cima
 
     gl.drawElements(mode, indices.length, gl.UNSIGNED_SHORT, 0);
   }
@@ -174,12 +185,20 @@ function initWebGL3D(canvasId) {
     return normals;
   }
 
+  let lightPosition = [0.0, 10.0, 0.0]; 
+
+  // Função para atualizar a posição da luz (será chamada pelo main.js)
+  function setLightPosition(x, y, z) {
+    lightPosition = [x, y, z];
+  }
+
   return {
     gl,
     program,
     canvas,
     draw3D,
     setCamera,
+    setLightPosition,
     clear: (color = [0.53, 0.81, 0.92, 1.0]) => {
       gl.clearColor(...color);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
