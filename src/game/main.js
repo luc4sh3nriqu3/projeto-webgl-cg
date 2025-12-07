@@ -10,6 +10,8 @@ let webglContext;
 let draw3D;
 let camera;
 let lastTime = 0;
+let cameraMode = 1; // Câmera default
+const sunPosition = [0, 10, -20]; // Posição fixa do sol no céu
 
 // Função auxiliar para obter matriz de transformação compatível com drawDino/drawCacto
 function getTransformMatrix(angleX, angleY, scale = 1.0, position = [0, 0, 0]) {
@@ -67,13 +69,24 @@ function gameLoop() {
 
     const gameState = game.getGameState();
 
-    camera.followPlayer(gameState.player, { x: 2, y: 5, z: 8 });
 
-    // Vista 2: Atrás do jogador (descomente para testar)
-    // camera.behindPlayer(gameState.player, { x: 0, y: 3, z: 6 });
+    window.addEventListener('keydown', (e) => {
+    if (e.key === '1') cameraMode = 1;
+    if (e.key === '2') cameraMode = 2;
+    if (e.key === '3') cameraMode = 3;});
 
-    // Vista 3: Lateral (descomente para testar)
-    // camera.sideView(gameState.player, { x: 6, y: 4, z: 2 });
+    if (cameraMode === 1) {
+        // Vista 1: Padrão (descomente para testar)
+        camera.followPlayer(gameState.player, { x: 2, y: 5, z: 8 });
+    } 
+    else if (cameraMode === 2) {
+        // Vista 2: Atrás do jogador (descomente para testar)
+        camera.behindPlayer(gameState.player, { x: 0, y: 3, z: 6 });
+    }
+    else if (cameraMode === 3) {
+        // Vista 3: Lateral (descomente para testar)
+        camera.sideView(gameState.player, { x: 6, y: 4, z: 2 });
+    }
 
     webglContext.setCamera(camera.getViewMatrix(), camera.getProjectionMatrix());
 
@@ -99,6 +112,8 @@ function render(gameState) {
 
     // Renderizar UI
     updateUIElements(gameState);
+
+    drawSun(sunPosition);
 }
 
 function renderGround3D() {
