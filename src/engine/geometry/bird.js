@@ -1,6 +1,7 @@
-function drawBird() {
-    let angleX = 0; // 30 graus - rotação em X
-    let angleY = 0; // 30 graus - rotação em Y
+function drawBird(anglePreset) {
+    const font = ANGLE_PRESETS.find(preset => preset.name === anglePreset);
+    let angleX = font.angleX;
+    let angleY = font.angleY;
 
     //Perna 1
     const asa1 = createCube('BLACK', 0.2, [0, 0, -0.4]);

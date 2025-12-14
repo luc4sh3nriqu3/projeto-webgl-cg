@@ -11,7 +11,20 @@ let draw3D;
 let camera;
 let lastTime = 0;
 let cameraMode = 1; // Câmera default
+
+// Sistema de ciclo dia/noite
+let dayNightTime = 0; // 0-0.5 = dia (sol), 0.5-1.0 = noite (lua)
+let cycleSpeed = 0.00025; // Velocidade mais lenta (metade da original)
 const sunPos = { x: -15, y: 5, z: -20 };
+const moonPos = { x: -15, y: 5, z: -20 };
+
+// Cores do céu
+const skyColors = {
+    day: [0.53, 0.81, 0.92],    // Azul claro (dia)
+    night: [0.05, 0.05, 0.15]   // Azul muito escuro (noite)
+};
+
+let currentSkyColor = [...skyColors.day];
 
 // Função auxiliar para obter matriz de transformação compatível com drawDino/drawCacto
 function getTransformMatrix(angleX, angleY, scale = 1.0, position = [0, 0, 0]) {
@@ -59,11 +72,14 @@ function setupWebGL() {
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
 
-    // Cor de fundo (céu azul claro)
+    // Cor de fundo inicial (será atualizada pelo ciclo)
     gl.clearColor(0.53, 0.81, 0.92, 1.0);
 }
 
 function gameLoop() {
+    // Atualizar ciclo dia/noite
+    updateDayNightCycle();
+
     // Atualizar jogo
     game.update();
 
@@ -78,7 +94,7 @@ function gameLoop() {
     if (cameraMode === 1) {
         // Vista 1: Padrão (descomente para testar)
         camera.followPlayer(gameState.player, { x: 2, y: 5, z: 8 });
-    } 
+    }
     else if (cameraMode === 2) {
         // Vista 2: Atrás do jogador (descomente para testar)
         camera.behindPlayer(gameState.player, { x: 0, y: 3, z: 6 });
@@ -96,16 +112,27 @@ function gameLoop() {
 }
 
 function render(gameState) {
-    // Limpar canvas
-    webglContext.clear();
+    // Limpar canvas com a cor atual do céu
+    webglContext.clear([...currentSkyColor, 1.0]);
 
-    // 1. Atualizar a posição da luz para ser a mesma do Sol
-    // (Assumindo que você criou sunPos ou tem a posição do objeto Sol)
-    webglContext.setLightPosition(sunPos.x, sunPos.y, sunPos.z);
+    // Determinar se é dia ou noite
+    const isDaytime = dayNightTime < 0.5;
 
-    // 2. Desenhar o Objeto Visual do Sol (A bola amarela)
-    // Se você criou o arquivo sun.js como conversamos:
-    drawSun([sunPos.x, sunPos.y, sunPos.z]);
+    if (isDaytime) {
+        // DIA: Renderizar sol
+        // 1. Atualizar a posição da luz para ser a mesma do Sol
+        webglContext.setLightPosition(sunPos.x, sunPos.y, sunPos.z);
+
+        // 2. Desenhar o Sol (bola amarela)
+        drawSun([sunPos.x, sunPos.y, sunPos.z]);
+    } else {
+        // NOITE: Renderizar lua
+        // 1. Atualizar a posição da luz para ser a mesma da Lua
+        webglContext.setLightPosition(moonPos.x, moonPos.y, moonPos.z);
+
+        // 2. Desenhar a Lua (bola branca)
+        drawMoon([moonPos.x, moonPos.y, moonPos.z]);
+    }
 
     // Renderizar pistas (chão)
     renderGround3D();
@@ -120,7 +147,6 @@ function render(gameState) {
 
     // Renderizar UI
     updateUIElements(gameState);
-
 }
 
 function renderGround3D() {
@@ -322,7 +348,7 @@ function renderBird3D(matrix) {
 
     // Extrair posição da matriz
     const x = matrix[12];
-    const y = matrix[13] + 2.0; // Pássaros voam mais alto
+    const y = matrix[13] + 1.0; // Pássaros voam mais alto
     const z = matrix[14];
 
     // Salvar a função getTransformMatrix original
@@ -352,10 +378,83 @@ function renderBird3D(matrix) {
     };
 
     // Chamar a função drawBird original()
-    drawBird();
+    drawBird(RIGTH);
 
     // Restaurar função original
     window.getTransformMatrix = originalTransform;
+}
+
+// Função para desenhar a lua (similar ao sol mas branca)
+function drawMoon(position) {
+    const [x, y, z] = position;
+    // Cria uma esfera branca/prateada para a lua
+    const lua = createSphere([0.9, 0.9, 1.0], 2.0, [x, y, z], 3); // Cor branca azulada
+    draw3D(lua.vertices, lua.colors, lua.indices);
+}
+
+// Interpolar entre duas cores
+function lerpColor(color1, color2, t) {
+    return [
+        color1[0] + (color2[0] - color1[0]) * t,
+        color1[1] + (color2[1] - color1[1]) * t,
+        color1[2] + (color2[2] - color1[2]) * t
+    ];
+}
+
+// Atualizar todo o ciclo dia/noite
+function updateDayNightCycle() {
+    // Incrementar tempo do ciclo
+    dayNightTime += cycleSpeed;
+
+    // Resetar quando completar o ciclo
+    if (dayNightTime >= 1.0) {
+        dayNightTime = 0.0;
+    }
+
+    // Determinar se é dia ou noite
+    const isDaytime = dayNightTime < 0.5;
+
+    if (isDaytime) {
+        // Atualizar posição do sol (0.0 a 0.5)
+        updateCelestialPosition(sunPos, dayNightTime * 2); // Normalizar para 0-1
+
+        // Transição de cor do céu (dia)
+        const transitionProgress = Math.min(dayNightTime * 4, 1); // Transição nos primeiros 25%
+        currentSkyColor = lerpColor(skyColors.night, skyColors.day, transitionProgress);
+    } else {
+        // Atualizar posição da lua (0.5 a 1.0)
+        updateCelestialPosition(moonPos, (dayNightTime - 0.5) * 2); // Normalizar para 0-1
+
+        // Transição de cor do céu (noite)
+        const transitionProgress = Math.min((dayNightTime - 0.5) * 4, 1); // Transição nos primeiros 25%
+        currentSkyColor = lerpColor(skyColors.day, skyColors.night, transitionProgress);
+    }
+
+    // Atualizar cor de fundo do WebGL
+    gl.clearColor(currentSkyColor[0], currentSkyColor[1], currentSkyColor[2], 1.0);
+}
+
+// Calcular posição parabólica para sol ou lua
+function updateCelestialPosition(celestialPos, time) {
+    // Parâmetros da parábola
+    const startX = -10;
+    const endX = 10;
+    const peakHeight = 8;
+    const baseHeight = 3;
+    const fixedZ = -10;
+
+    // Calcular X linearmente de -15 a 15
+    celestialPos.x = startX + (endX - startX) * time;
+
+    // Calcular Y em parábola
+    const normalizedX = (celestialPos.x - startX) / (endX - startX);
+    const parabolaX = normalizedX * 2 - 1;
+
+    // Fórmula da parábola invertida (pico no centro)
+    celestialPos.y = baseHeight + (peakHeight - baseHeight) * (1 - parabolaX * parabolaX);
+
+    // Z fixo
+    celestialPos.z = fixedZ;
 }
 
 function updateUIElements(gameState) {
