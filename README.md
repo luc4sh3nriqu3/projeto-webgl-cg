@@ -3,19 +3,6 @@
 > Projeto final da disciplina de Computação Gráfica  
 > Implementação de um endless runner 3D utilizando WebGL puro
 
-## 📋 Índice
-
-- [Visão Geral](#-visão-geral)
-- [Arquitetura do Sistema](#-arquitetura-do-sistema)
-- [Core do Projeto](#-core-do-projeto)
-- [Transformações Matemáticas](#-transformações-matemáticas)
-- [Pipeline de Renderização](#-pipeline-de-renderização)
-- [Sistema de Câmera](#-sistema-de-câmera)
-- [Sistema de Iluminação](#-sistema-de-iluminação)
-- [Ciclo Dia/Noite](#-ciclo-dianoite)
-- [Como Executar](#-como-executar)
-
----
 
 ## 🎮 Visão Geral
 
@@ -35,38 +22,6 @@
 - ✅ Geometria procedimental (esferas, cubos)
 - ✅ Depth testing e face culling
 - ✅ Matrizes de transformação customizadas
-
----
-
-## 🏗️ Arquitetura do Sistema
-
-```
-projeto-webgl-cg/
-│
-├── src/
-│   ├── engine/              # Core do motor gráfico
-│   │   ├── webgl-utils-3d.js    # Inicialização WebGL e shaders
-│   │   ├── camera3d.js          # Sistema de câmera 3D
-│   │   ├── shader.js            # Compilação de shaders
-│   │   ├── colors.js            # Paleta de cores
-│   │   └── geometry/            # Geometrias 3D
-│   │       ├── shapes.js        # Primitivas (cubo, esfera)
-│   │       ├── dino.js          # Modelo do dinossauro
-│   │       ├── cacto.js         # Modelo do cacto
-│   │       ├── rock.js          # Modelo da pedra
-│   │       └── bird.js          # Modelo do pássaro
-│   │
-│   ├── game/                # Lógica do jogo
-│   │   ├── main.js          # Loop principal e renderização
-│   │   └── player.js        # Controle do jogador
-│   │
-│   └── math/                # Biblioteca matemática
-│       ├── m4.js            # Operações com matrizes 4x4
-│       └── vec3.js          # Operações com vetores 3D
-│
-├── index.html               # Página principal
-└── style.css               # Estilos
-```
 
 ---
 
