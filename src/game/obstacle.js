@@ -37,11 +37,17 @@ class Obstacle {
 
         const box = boxes[this.type] || boxes['cacto'];
 
+        // Aplicar escala de hitbox para deixá-la mais justa ao visual
+        // Se existir `HITBOX_SCALE` em `const.js`, use-o; caso contrário use 0.8
+        const scale = (typeof HITBOX_SCALE !== 'undefined') ? HITBOX_SCALE : 0.6;
+
         return {
             x: this.position.x,
             y: this.position.y,
             z: this.position.z,
-            ...box
+            width: box.width * scale,
+            height: box.height * scale,
+            depth: box.depth * scale
         };
     }
 
@@ -59,7 +65,7 @@ class Obstacle {
 }
 
 class ObstacleManager {
-    constructor(gameSpeed = 0.08) { // Velocidade ligeiramente maior para 3D
+    constructor(gameSpeed = 0.3) { // Velocidade ligeiramente maior para 3D
         this.obstacles = [];
         this.gameSpeed = gameSpeed;
         this.spawnTimer = 0;

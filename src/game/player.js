@@ -20,7 +20,7 @@ class Player {
         this.jumpVelocity = 0;
         this.jumpHeight = 0;
         this.gravity = -0.02; // Gravidade mais forte para 3D
-        this.jumpPower = 0.5; // Pulo mais alto
+        this.jumpPower = 0.4; // Pulo mais alto
 
         // Controles
         this.keys = {
@@ -119,14 +119,19 @@ class Player {
     }
 
     getBoundingBox() {
-        // Retorna caixa de colisão do dinossauro
+        // Retorna caixa de colisão do dinossauro.
+        // Dimensões reduzidas para melhorar a jogabilidade (menos "pegajoso").
+        // Usa HITBOX_SCALE de `const.js` quando disponível.
+        const defaultBox = { width: 0.4, height: 0.8, depth: 0.4 };
+        const scale = (typeof HITBOX_SCALE !== 'undefined') ? HITBOX_SCALE : 0.8;
+
         return {
             x: this.position.x,
             y: this.position.y,
             z: this.position.z,
-            width: 0.4,
-            height: 0.8,
-            depth: 0.4
+            width: defaultBox.width * scale,
+            height: defaultBox.height * scale,
+            depth: defaultBox.depth * scale
         };
     }
 

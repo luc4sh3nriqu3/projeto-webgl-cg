@@ -15,3 +15,5 @@ const BOTTOM = 'bottom';
 const FRONT = 'front';
 const BACK = 'back';
 const ISO = 'iso';
+
+const HITBOX_SCALE = 0.75;
